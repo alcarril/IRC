@@ -6,7 +6,7 @@
 /*   By: alejandro <alejandro@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:10:58 by Guille            #+#    #+#             */
-/*   Updated: 2026/04/30 17:29:00 by alejandro        ###   ########.fr       */
+/*   Updated: 2026/04/30 18:51:01 by alejandro        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -943,7 +943,7 @@ void Server::_cmdMode(Client& client, const std::vector<std::string>& params)
 	}
 }
 
-void Server::_cmdFile(Client& client, const std::vector<std::string>& params, const std::string& trailing)
+void Server::_cmdFile(Client& client, const std::vector<std::string>& params, const std::string& trailing) //CAMBIOS
 {
 	if (params.empty())
 	{
