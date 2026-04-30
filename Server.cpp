@@ -6,7 +6,7 @@
 /*   By: alejandro <alejandro@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:10:58 by Guille            #+#    #+#             */
-/*   Updated: 2026/04/30 17:24:09 by alejandro        ###   ########.fr       */
+/*   Updated: 2026/04/30 17:29:00 by alejandro        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -943,37 +943,67 @@ void Server::_cmdMode(Client& client, const std::vector<std::string>& params)
 	}
 }
 
-void Server::_cmdFile(Client& client, const std::vector<std::string>& params, const std::string& trailing) { //CAMBIOS
-	if (params.empty()) {
+void Server::_cmdFile(Client& client, const std::vector<std::string>& params, const std::string& trailing)
+{
+	if (params.empty())
+	{
 		_sendReply(client.getFd(), "461", client.getNick(), "FILE :Not enough parameters (SEND/GET/LIST)");
 		return;
 	}
 
 	std::string sub = params[0];
-	for (size_t i = 0; i < sub.size(); ++i) sub[i] = std::toupper(sub[i]);
+	for (size_t i = 0; i < sub.size(); ++i)
+	{
+		sub[i] = std::toupper(sub[i]);
+	}
 
-	if (sub == "SEND" && params.size() >= 3 && !trailing.empty()) {
+	if (sub == "SEND" && params.size() >= 3 && !trailing.empty())
+	{
 		Client* target = _getClientByNick(params[1]);
-		if (!target) return _sendReply(client.getFd(), "401", client.getNick(), params[1] + " :No such nick");
+		if (!target)
+		{
+			_sendReply(client.getFd(), "401", client.getNick(), params[1] + " :No such nick");
+			return;
+		}
 
 		_fileHandler.saveFile(params[1], params[2], trailing, client.getNick());
 		_sendReply(client.getFd(), "NOTICE", client.getNick(), "File sent to " + params[1]);
-		_sendReply(target->getFd(), "NOTICE", target->getNick(), client.getNick() + " sent you: " + params[2]);
-	} 
-	else if (sub == "LIST") {
+		_sendReply(target->getFd(), "NOTICE", target->getNick(),
+				   client.getNick() + " sent you: " + params[2]);
+	}
+	else if (sub == "LIST")
+	{
 		std::vector<FileInfo> list = _fileHandler.getPendingList(client.getNick());
-		std::string pendingMsg = std::string("Pending files: ") + (list.empty() ? "None" : "");
+
+		std::string pendingMsg = "Pending files: ";
+		if (list.empty())
+		{
+			pendingMsg += "None";
+		}
+
 		_sendReply(client.getFd(), "NOTICE", client.getNick(), pendingMsg);
+
 		for (size_t i = 0; i < list.size(); ++i)
-			_sendReply(client.getFd(), "NOTICE", client.getNick(), "- " + list[i].filename + " from " + list[i].senderNick);
-	} 
-	else if (sub == "GET" && params.size() >= 2) {
+		{
+			_sendReply(client.getFd(), "NOTICE", client.getNick(),
+					   "- " + list[i].filename + " from " + list[i].senderNick);
+		}
+	}
+	else if (sub == "GET" && params.size() >= 2)
+	{
 		FileInfo* fi = _fileHandler.getFile(client.getNick(), params[1]);
-		if (fi) {
-			_sendReply(client.getFd(), "NOTICE", client.getNick(), "DATA " + fi->filename + " :" + fi->content);
+
+		if (fi)
+		{
+			_sendReply(client.getFd(), "NOTICE", client.getNick(),
+					   "DATA " + fi->filename + " :" + fi->content);
+
 			_fileHandler.removeFile(client.getNick(), params[1]);
-		} else {
-			_sendReply(client.getFd(), "404", client.getNick(), params[1] + " :File not found");
+		}
+		else
+		{
+			_sendReply(client.getFd(), "404", client.getNick(),
+					   params[1] + " :File not found");
 		}
 	}
 }
