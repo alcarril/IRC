@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: Guille <Guille@student.42.fr>              +#+  +:+       +#+         #
+#    By: alejandro <alejandro@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/08 07:53:27 by Guille            #+#    #+#              #
-#    Updated: 2026/03/23 12:00:39 by Guille           ###   ########.fr        #
+#    Updated: 2026/04/30 16:54:35 by alejandro        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ BONUS_NAME = ircserv_bonus
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 
 DEPFLAGS = -MMD -MP
-SRCS =  main.cpp Server.cpp Client.cpp Channel.cpp
+SRCS =  main.cpp Server.cpp Client.cpp Channel.cpp FileHandler.cpp
 BONUS_SRC = $(SRCS) Bot.cpp
 OBJDIR = obj
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.cpp=.o))

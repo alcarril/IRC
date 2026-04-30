@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Guille <Guille@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alejandro <alejandro@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:11:03 by Guille            #+#    #+#             */
-/*   Updated: 2026/03/23 11:42:23 by Guille           ###   ########.fr       */
+/*   Updated: 2026/04/30 17:22:48 by alejandro        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <vector>
 # include <map>
 # include <poll.h>
+# include "FileHandler.hpp"
+# include <cstdlib>
 
 
 class Client;
@@ -37,6 +39,7 @@ class Server
 		Server();
 		Server(const Server&);
 		Server& operator=(const Server&);
+		FileHandler _fileHandler;
 
 		// Setup
 		void _setupSocket();
@@ -73,6 +76,8 @@ class Server
 		void _cmdTopic (Client& c, const std::vector<std::string>& params,
 						const std::string& trailing);
 		void _cmdMode  (Client& c, const std::vector<std::string>& params);
+
+		void _cmdFile(Client& client, const std::vector<std::string>& params, const std::string& trailing); //CAMBIOS
 
 		// Helpers
 		void     _send       (int fd, const std::string& msg);
