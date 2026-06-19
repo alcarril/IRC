@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alejandro <alejandro@student.42.fr>        +#+  +:+       +#+         #
+#    By: Guille <Guille@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/08 07:53:27 by Guille            #+#    #+#              #
-#    Updated: 2026/04/30 16:54:35 by alejandro        ###   ########.fr        #
+#    Updated: 2026/03/23 12:00:39 by Guille           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,8 @@ BONUS_NAME = ircserv_bonus
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 
 DEPFLAGS = -MMD -MP
-SRCS =  main.cpp Server.cpp Client.cpp Channel.cpp FileHandler.cpp
-BONUS_SRC = $(SRCS) Bot.cpp
+SRCS =  main.cpp Server.cpp Client.cpp Channel.cpp
+BONUS_SRC = $(SRCS) FileTransfer.cpp # CAMBIOS
 OBJDIR = obj
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.cpp=.o))
 BONUS_OBJ = $(addprefix $(OBJDIR)/, $(BONUS_SRC:.cpp=.o))
@@ -29,6 +29,8 @@ $(OBJDIR):
 $(NAME): $(OBJDIR) $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
 
+# CAMBIOS: regla bonus con -D BONUS
+bonus: CXXFLAGS += -D BONUS
 bonus: $(OBJDIR) $(BONUS_OBJ)
 	$(CXX) $(CXXFLAGS) -o $(BONUS_NAME) $(BONUS_OBJ)
 	

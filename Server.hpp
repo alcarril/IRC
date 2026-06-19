@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alejandro <alejandro@student.42.fr>        +#+  +:+       +#+        */
+/*   By: Guille <Guille@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:11:03 by Guille            #+#    #+#             */
-/*   Updated: 2026/04/30 17:22:48 by alejandro        ###   ########.fr       */
+/*   Updated: 2026/03/23 11:42:23 by Guille           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,16 @@
 # include <vector>
 # include <map>
 # include <poll.h>
-# include "FileHandler.hpp"
-# include <cstdlib>
 
 
 class Client;
 class Channel;
+
+#ifdef BONUS // CAMBIOS
+class FileTransfer; // CAMBIOS
+# include "FileTransfer.hpp" // CAMBIOS
+#endif // CAMBIOS
+
 
 class Server
 {
@@ -39,7 +43,6 @@ class Server
 		Server();
 		Server(const Server&);
 		Server& operator=(const Server&);
-		FileHandler _fileHandler;
 
 		// Setup
 		void _setupSocket();
@@ -77,8 +80,6 @@ class Server
 						const std::string& trailing);
 		void _cmdMode  (Client& c, const std::vector<std::string>& params);
 
-		void _cmdFile(Client& client, const std::vector<std::string>& params, const std::string& trailing); //CAMBIOS
-
 		// Helpers
 		void     _send       (int fd, const std::string& msg);
 		void     _sendReply  (int fd, const std::string& code,
@@ -88,6 +89,20 @@ class Server
 		Channel* _getChannel        (const std::string& name);
 		Channel* _getOrCreateChannel(const std::string& name);
 
+#ifdef BONUS // CAMBIOS
+		// File transfer (DCC) // CAMBIOS
+		void _cmdDcc   (Client& c, const std::vector<std::string>& params, // CAMBIOS
+						const std::string& trailing); // CAMBIOS
+		void _dccSend  (Client& c, const std::vector<std::string>& params); // CAMBIOS
+		void _dccAccept(Client& c, const std::vector<std::string>& params); // CAMBIOS
+		void _dccDeny  (Client& c, const std::vector<std::string>& params); // CAMBIOS
+		void _dccCancel(Client& c, const std::vector<std::string>& params); // CAMBIOS
+		void _dccList  (Client& c); // CAMBIOS
+		std::string toStr(int n)  const; // CAMBIOS
+		std::string toStr(long n) const; // CAMBIOS
+		std::string stateToStr(TransferState s) const; // CAMBIOS
+#endif // CAMBIOS
+
 		// Atributos
 		int                             _port;
 		std::string                     _password;
@@ -96,6 +111,10 @@ class Server
 		std::vector<struct pollfd>      _fds;
 		std::map<int, Client*>          _clients;
 		std::map<std::string, Channel*> _channels;
+#ifdef BONUS // CAMBIOS
+		std::map<int, FileTransfer*>    _transfers; // CAMBIOS
+		int                             _nextTransferId; // CAMBIOS
+#endif // CAMBIOS
 };
 
 #endif
